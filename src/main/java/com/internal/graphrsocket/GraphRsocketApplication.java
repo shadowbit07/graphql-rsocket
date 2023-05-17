@@ -18,6 +18,18 @@ public class GraphRsocketApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GraphRsocketApplication.class, args);
 	}
+	
+	@Bean
+	ApplicationRunner applicationRunner (RSocketGraphQlClient.Builder<?> builder) {
+		RSocketGraphQlClient rSocketClient = builder.tcp("127.0.0.1", 9191).route("graphql").build();
+		return args -> {
+			String document = "subscription { employees { name } }";
+			rSocketClient.document(document)
+					.retrieveSubscription("employees")
+					.toEntity(Employee.class)
+					.subscribe(System.out::println);
+		};
+	}
 
 }
 
