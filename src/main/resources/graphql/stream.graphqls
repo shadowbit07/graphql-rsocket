@@ -1,0 +1,11 @@
+type Query {
+    employee: Employee
+}
+
+type Subscription {
+    employees: Employee
+}
+
+type Employee {
+    name: String
+}
